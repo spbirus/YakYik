@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
-import { Alert, Button, AppRegistry, Text, View, Image, ScrollView, Platform, StatusBar, TouchableOpacity } from 'react-native';
-// import Home from './Home'
-// import Message from './Message'
-import { createStackNavigator, createAppContainer } from 'react-navigation';
-var names = ["Sam", "Bob", "Nick", "Jason", "Tim", "John", "Bailey", "Dave", "Amanda"]
+import { Alert, AppRegistry, Text, View, Image, ScrollView, Platform, StatusBar, TouchableOpacity } from 'react-native';
+var names = ["Sam", "Bob", "Nick", "Jason", "Bailey", "Dave", "Amanda"]
 
-//home screen
 class Upvote extends Component{
   render() {
     return (
@@ -23,16 +19,12 @@ class Downvote extends Component{
 }
 
 class Card extends Component {
-  addCommand = () => {
-    this.props.navigation.navigate("Message");
-  }
   render() {
-    // const { navigate } = this.props.navigation;
     return (
       <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
         
         {/* the message part */}
-        <TouchableOpacity onPress={this.addCommand} underlayColor="white">
+        <TouchableOpacity onPress={_onPressMessage} underlayColor="white">
           <View style={{flex: 1, textAlign: 'left'}}>
             <Text>{this.props.name}</Text>
           </View>
@@ -53,30 +45,37 @@ class Card extends Component {
   }
 }
 
-class HomeScreen extends Component {
+export default class Home extends Component {
   static navigationOptions = {
     title: 'Welcome',
   };
   render() {
+    const {navigate} = this.props.navigation;
     return (
       <ScrollView style={{ paddingTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight }}>
         <View style={{flex: 1}}>
-            {loopNames(this.props.navigation)}
+            {loopNames()}
         </View>
       </ScrollView>
     );
   }
 }
 
-function loopNames(nav) {
+function loopNames() {
   return names.map((data) => {
     return (
       <View style={{height: 120, backgroundColor: '#33cccc', borderBottomColor: 'black', borderWidth: 2}}>
-        <Card name={data} navigation={nav}/>
+        <Card name={data}/>
       </View>
       
     )
   })
+}
+
+function _onPressMessage() {
+  Alert.alert('You tapped the message!')
+  const {navigate} = this.props.navigation;
+  navigate('Message')
 }
 
 function _onUpvote() {
@@ -86,40 +85,3 @@ function _onUpvote() {
 function _onDownvote() {
   Alert.alert('You tapped the downvote!')
 }
-
-
-//Message screen
-class MessageScreen extends Component {
-  render() {
-    return (
-      <View style={{flex: 1, textAlign: 'left'}}>
-        <View style={{height: 120, backgroundColor: '#33cccc', borderBottomColor: 'black', borderWidth: 2}}>
-          <Text></Text>
-        </View>
-        
-        
-      </View>
-    )
-  }
-}
-
-
-// multi screen part
-const RootStack = createStackNavigator({
-  Home: {
-    screen: HomeScreen,
-    header: { visible: false },
-    navigationOptions: {
-      title: 'Home',
-      header: null
-    },
-  },
-  Message: {
-    screen: MessageScreen,
-    header: { visible: false },
-  },
-});
-
-const App = createAppContainer(RootStack);
-
-export default App;
