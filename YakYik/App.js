@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Alert, Button, AppRegistry, Text, View, Image, ScrollView, Platform, StatusBar, TouchableOpacity } from 'react-native';
+import { Alert, Button, AppRegistry, Text, View, TextInput, Image, ScrollView, Platform, StatusBar, TouchableOpacity } from 'react-native';
 // import Home from './Home'
 // import Message from './Message'
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 var names = ["Sam", "Bob", "Nick", "Jason", "Tim", "John", "Bailey", "Dave", "Amanda"]
 
+//===================================================
 //home screen
 class Upvote extends Component{
   render() {
@@ -55,19 +56,52 @@ class Card extends Component {
 
 class HomeScreen extends Component {
   static navigationOptions = {
-    title: 'Welcome',
-  };
+    title: 'Welcome to YakYik',
+    headerStyle: {
+      backgroundColor: '#009999',
+    },
+  }
+  addCreate = () => {
+    this.props.navigation.navigate("Create");
+  }
   render() {
     return (
-      <ScrollView style={{ paddingTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight }}>
-        <View style={{flex: 1}}>
-            {loopNames(this.props.navigation)}
+      // style={{ paddingTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight }}
+      <View>
+        {/* scroll view */}
+        <ScrollView>
+          <View style={{flex: 1}}>
+              {loopNames(this.props.navigation)}
+          </View>
+        </ScrollView>
+        {/* create button */}
+        <View
+          style={{
+            position: 'absolute',
+            right: 5,
+            bottom: 5,
+            backgroundColor: '#009999',
+            borderRadius: 50,
+            width: 70,
+            height: 70,
+          }}>
+          <TouchableOpacity onPress={this.addCreate}>
+            <Image source={require("./assets/create.png")} 
+              style={{marginLeft: 'auto', 
+              marginRight: 'auto', 
+              marginTop: 'auto', 
+              marginBottom: 'auto', 
+              width: 50, 
+              height: 50}}/>
+          </TouchableOpacity>
         </View>
-      </ScrollView>
+        
+      </View>
     );
   }
 }
 
+//helper functions
 function loopNames(nav) {
   return names.map((data) => {
     return (
@@ -88,35 +122,67 @@ function _onDownvote() {
 }
 
 
+//===================================================
 //Message screen
 class MessageScreen extends Component {
+  static navigationOptions = {
+    title: 'Message',
+    headerStyle: {
+      backgroundColor: '#009999',
+    },
+  }
   render() {
     return (
       <View style={{flex: 1, textAlign: 'left'}}>
         <View style={{height: 120, backgroundColor: '#33cccc', borderBottomColor: 'black', borderWidth: 2}}>
           <Text></Text>
         </View>
-        
-        
       </View>
     )
   }
 }
 
 
+//===================================================
+//Create screen
+class CreateScreen extends Component {
+  static navigationOptions = {
+    title: 'Create',
+    headerStyle: {
+      backgroundColor: '#009999',
+    },
+  }
+  render() {
+    return (
+      <View style={{flex: 1, textAlign: 'left', backgroundColor: '#33cccc'}}>
+        <View style={{height: 120, backgroundColor: '#33cccc', borderBottomColor: 'black', borderWidth: 2}}>
+          <TextInput
+          style={{height: 40, color: 'black'}}
+          placeholder="Type here!"
+          onChangeText={(text) => this.setState({text})}
+          />
+        </View>
+      </View>
+      
+    )
+  }
+}
+
+
+//===================================================
 // multi screen part
 const RootStack = createStackNavigator({
   Home: {
     screen: HomeScreen,
     header: { visible: false },
-    navigationOptions: {
-      title: 'Home',
-      header: null
-    },
   },
   Message: {
     screen: MessageScreen,
     header: { visible: false },
+  },
+  Create: {
+    screen: CreateScreen,
+    header: {visible: false},
   },
 });
 
